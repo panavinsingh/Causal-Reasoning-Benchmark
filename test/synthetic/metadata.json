@@ -3,5 +3,7 @@
     "source": "Custom generated",
     "samples": 600,
     "license": "Apache-2.0",
+    "spdx": "Apache-2.0",
+    "selection_rule": "Stratified by rung × answer (seed 42)",
     "description": "Synthetic causal reasoning dataset covering all Pearl's Causal Hierarchy rungs"
 }

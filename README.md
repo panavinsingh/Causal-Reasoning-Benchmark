@@ -32,17 +32,20 @@ This repository provides curated training and evaluation datasets for causal rea
 
 | Split | Dataset | Rows | License | Selection Rule |
 |-------|---------|------|---------|----------------|
-| **Train** | CCR.GB | 4,000 | MIT | `sha256(prompt) % 12 == 3`, exclude test IDs |
+| **Train** | CCR.GB | 4,000 | GPL-3.0 | `sha256(prompt) % 12 == 3`, exclude test IDs |
 | **Train** | CounterBench | 1,000 | MIT | First 1,000 samples |
-| **Dev** | CCR.GB | 300 | MIT | `sha256(prompt) % 12 == 7` |
-| **Test** | CCR.GB | 400 | MIT | Contiguous curriculum blocks |
+| **Dev** | CCR.GB | 300 | GPL-3.0 | `sha256(prompt) % 12 == 7` |
+| **Test** | CCR.GB | 400 | GPL-3.0 | Contiguous curriculum blocks |
 | **Test** | CLadder | 1,278 | Apache-2.0 | `id % 8 == 0` |
 | **Test** | Corr2Cause | 400 | CC-BY-4.0 | Stratified by label (seed 42) |
 | **Test** | CauSciBench | 155 | Apache-2.0 | Full benchmark |
 | **Test** | Synthetic | 600 | Apache-2.0 | Stratified by rung (seed 42) |
 
-| | **Train Total** | **5,000** | | |
-| | **Test Total** | **2,833** | | |
+| | | | | |
+|---|---|---|---|---|
+| **Train Total** | | **5,000** | | |
+| **Dev Total** | | **300** | | |
+| **Test Total** | | **2,833** | | |
 
 ---
 
@@ -71,7 +74,8 @@ This repository provides curated training and evaluation datasets for causal rea
 ├── src/                        # Source code
 │   ├── prepare_data.py
 │   ├── build_train_4k.py
-│   └── verify.py
+│   ├── verify.py
+│   └── check_contamination.py
 │
 ├── checksums/                  # SHA-256 manifests
 │   ├── train.sha256
@@ -87,12 +91,15 @@ This repository provides curated training and evaluation datasets for causal rea
 ## Quick Start
 
 ```bash
-git clone https://github.com/your-username/causal-reasoning-benchmark.git
-cd causal-reasoning-benchmark
+git clone https://github.com/panavinsingh/Causal-Reasoning-Benchmark.git
+cd Causal-Reasoning-Benchmark
 pip install pandas datasets
 
 # Verify integrity
 python src/verify.py
+
+# Check for contamination
+python src/check_contamination.py
 
 # Rebuild from scratch (optional)
 python src/prepare_data.py --force-download
@@ -131,6 +138,7 @@ Curriculum-aware contiguous blocks preserving compositional complexity:
 | **Deterministic** | Hash-based sampling, no RNG |
 | **Verifiable** | SHA-256 checksums for all files |
 | **Leak-free** | ID-based overlap verification |
+| **Traceable** | HuggingFace commit hashes in metadata |
 | **Rebuild** | `build_train_4k.py` regenerates exact splits |
 
 ```bash
@@ -139,19 +147,37 @@ python src/verify.py --check-integrity
 
 # Check overlap
 python src/verify.py --check-overlap
+
+# Full contamination check
+python src/check_contamination.py
 ```
+
+---
+
+## Dataset Sources
+
+| Dataset | Source | Commit/Version |
+|---------|--------|----------------|
+| CCR.GB | [jmaasch/compositional_causal_reasoning](https://huggingface.co/datasets/jmaasch/compositional_causal_reasoning) | `564e27ae` |
+| CounterBench | [CounterBench/CounterBench](https://huggingface.co/datasets/CounterBench/CounterBench) | `c6225dfa` |
+| CLadder | [causalnlp/CLadder](https://huggingface.co/datasets/causalnlp/CLadder) | v1.5 |
+| Corr2Cause | [causalnlp/corr2cause](https://huggingface.co/datasets/causalnlp/corr2cause) | test split |
+| CauSciBench | [causalNLP/CauSciBench](https://github.com/causalNLP/CauSciBench) | main |
 
 ---
 
 ## License
 
-| Dataset | License |
-|---------|---------|
-| CCR.GB | MIT |
-| CounterBench | MIT |
-| CLadder | Apache-2.0 |
-| Corr2Cause | CC-BY-4.0 |
-| CauSciBench | Apache-2.0 |
+| Dataset | License | SPDX |
+|---------|---------|------|
+| CCR.GB | GPL-3.0 | `GPL-3.0-only` |
+| CounterBench | MIT | `MIT` |
+| CLadder | Apache-2.0 | `Apache-2.0` |
+| Corr2Cause | CC-BY-4.0 | `CC-BY-4.0` |
+| CauSciBench | Apache-2.0 | `Apache-2.0` |
+| Synthetic | Apache-2.0 | `Apache-2.0` |
+
+The benchmark infrastructure and documentation are licensed under [CC-BY-4.0](LICENSE).
 
 ---
 
@@ -160,8 +186,8 @@ python src/verify.py --check-overlap
 ```bibtex
 @misc{causal-reasoning-benchmark,
   title={Causal Reasoning Benchmark},
-  author={Your Name},
+  author={Singh, Panavin},
   year={2026},
-  url={https://github.com/your-username/causal-reasoning-benchmark}
+  url={https://github.com/panavinsingh/Causal-Reasoning-Benchmark}
 }
 ```

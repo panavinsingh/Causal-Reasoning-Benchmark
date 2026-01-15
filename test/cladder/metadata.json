@@ -2,7 +2,10 @@
     "name": "CLadder",
     "source": "https://huggingface.co/datasets/causalnlp/CLadder",
     "version": "v1.5",
+    "split": "full_v1.5_default",
     "samples": 1278,
     "license": "Apache-2.0",
+    "spdx": "Apache-2.0",
+    "selection_rule": "id % 8 == 0",
     "description": "Causal Ladder benchmark covering all three rungs of Pearl's Causal Hierarchy"
 }

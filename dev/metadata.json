@@ -1,6 +1,11 @@
 {
   "name": "Dev Split",
+  "source": "https://huggingface.co/datasets/jmaasch/compositional_causal_reasoning",
+  "subset": "clinical_notes_v0",
+  "commit": "564e27ae0c447265f269208e34173b06d20971ad",
   "samples": 300,
-  "license": "MIT",
-  "selection_rule": "sha256(prompt) %% 12 == 7"
+  "license": "GPL-3.0",
+  "spdx": "GPL-3.0-only",
+  "selection_rule": "sha256(prompt) % 12 == 7",
+  "description": "Deterministic dev split from CCR.GB"
 }

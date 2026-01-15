@@ -1,7 +1,11 @@
 {
   "name": "CCR.GB Test",
   "source": "https://huggingface.co/datasets/jmaasch/compositional_causal_reasoning",
+  "subset": "clinical_notes_v0",
+  "commit": "564e27ae0c447265f269208e34173b06d20971ad",
   "samples": 400,
-  "license": "MIT",
-  "description": "Curriculum-aware test split (400 samples)"
+  "license": "GPL-3.0",
+  "spdx": "GPL-3.0-only",
+  "selection_rule": "Contiguous curriculum blocks (rows 0-399)",
+  "description": "Curriculum-aware test split covering all difficulty tiers"
 }

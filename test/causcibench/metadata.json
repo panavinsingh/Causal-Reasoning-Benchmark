@@ -3,5 +3,7 @@
     "source": "https://github.com/causalNLP/CauSciBench",
     "samples": 155,
     "license": "Apache-2.0",
+    "spdx": "Apache-2.0",
+    "selection_rule": "Full benchmark",
     "description": "Causal scientific reasoning benchmark"
 }

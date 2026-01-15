@@ -4,5 +4,7 @@
     "split": "test",
     "samples": 400,
     "license": "CC-BY-4.0",
+    "spdx": "CC-BY-4.0",
+    "selection_rule": "Stratified by label (seed 42)",
     "description": "Correlation to causation inference benchmark"
 }

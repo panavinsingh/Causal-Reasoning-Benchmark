@@ -1,7 +1,10 @@
 {
   "name": "CounterBench",
   "source": "https://huggingface.co/datasets/CounterBench/CounterBench",
+  "commit": "c6225dfa00b7a89ccfeae67797b9a6d80e48e44c",
   "samples": 1000,
   "license": "MIT",
-  "description": "Counterfactual reasoning benchmark (first 1000 samples)"
+  "spdx": "MIT",
+  "selection_rule": "First 1000 samples",
+  "description": "Counterfactual reasoning benchmark"
 }

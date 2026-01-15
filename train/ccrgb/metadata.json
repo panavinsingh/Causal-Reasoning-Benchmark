@@ -1,7 +1,11 @@
 {
   "name": "CCR.GB Train",
-  "source": "jmaasch/compositional_causal_reasoning",
+  "source": "https://huggingface.co/datasets/jmaasch/compositional_causal_reasoning",
+  "subset": "clinical_notes_v0",
+  "commit": "564e27ae0c447265f269208e34173b06d20971ad",
   "samples": 4000,
-  "license": "MIT",
-  "selection_rule": "sha256(prompt) %% 12 == 3, exclude test IDs"
+  "license": "GPL-3.0",
+  "spdx": "GPL-3.0-only",
+  "selection_rule": "sha256(prompt) % 12 == 3, exclude test IDs",
+  "description": "Deterministic 4K training subset from CCR.GB clinical notes"
 }
