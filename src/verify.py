@@ -29,12 +29,12 @@ EXPECTED_TEST = ["ccrgb", "cladder", "corr2cause", "causcibench", "synthetic"]
 
 
 def sha256_file(filepath: Path) -> str:
-    """Compute SHA-256 hash of a file."""
-    h = hashlib.sha256()
+    """Compute SHA-256 hash of a file with LF-normalized line endings."""
     with open(filepath, "rb") as f:
-        for chunk in iter(lambda: f.read(8192), b""):
-            h.update(chunk)
-    return h.hexdigest()
+        content = f.read()
+    # Normalize CRLF to LF for cross-platform consistency
+    content = content.replace(b"\r\n", b"\n")
+    return hashlib.sha256(content).hexdigest()
 
 
 def check_structure() -> bool:
