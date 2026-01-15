@@ -1,0 +1,7 @@
+{
+  "name": "CCR.GB Test",
+  "source": "https://huggingface.co/datasets/jmaasch/compositional_causal_reasoning",
+  "samples": 400,
+  "license": "MIT",
+  "description": "Curriculum-aware test split (400 samples)"
+}

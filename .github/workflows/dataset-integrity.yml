@@ -1,0 +1,78 @@
+name: Dataset Integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/**'
+      - 'sha256/**'
+      - 'scripts/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  integrity-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install pandas datasets
+      
+      - name: Verify CCR.GB checksums
+        run: |
+          python scripts/make_ccrgb_splits.py --verify
+      
+      - name: Check train/test overlap
+        run: |
+          python scripts/overlap_check.py --by-id \
+            --train data/ccrgb_train_rem.jsonl \
+            --test data/ccrgb_test_400.jsonl
+      
+      - name: Smoke test (32 samples)
+        run: |
+          if [ -f "run.sh" ]; then
+            bash run.sh --dry-run --n 32
+          else
+            echo "Skipping smoke test - run.sh not found"
+          fi
+
+  dataset-stats:
+    runs-on: ubuntu-latest
+    needs: integrity-check
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install pandas
+      
+      - name: Report dataset statistics
+        run: |
+          echo "## Dataset Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "| File | Lines |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|" >> $GITHUB_STEP_SUMMARY
+          
+          for f in data/*.jsonl data/*.csv; do
+            if [ -f "$f" ]; then
+              lines=$(wc -l < "$f")
+              echo "| $(basename $f) | $lines |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done

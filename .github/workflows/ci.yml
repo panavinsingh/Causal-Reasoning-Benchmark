@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install pandas datasets
+      
+      - name: Check structure
+        run: python src/verify.py --check-structure
+      
+      - name: Verify checksums
+        run: python src/verify.py --check-integrity
+      
+      - name: Check train/test overlap
+        run: python src/verify.py --check-overlap
+      
+      - name: Check data contamination
+        run: python src/check_contamination.py
+
+  data-stats:
+    runs-on: ubuntu-latest
+    needs: verify
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Report statistics
+        run: |
+          echo "## Dataset Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Training Data" >> $GITHUB_STEP_SUMMARY
+          echo "| Dataset | Samples |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|---------|" >> $GITHUB_STEP_SUMMARY
+          for f in train/*/; do
+            name=$(basename $f)
+            if [ -f "${f}metadata.json" ]; then
+              samples=$(grep -o '"samples": [0-9]*' "${f}metadata.json" | grep -o '[0-9]*')
+              echo "| $name | $samples |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Test Data" >> $GITHUB_STEP_SUMMARY
+          echo "| Dataset | Samples |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|---------|" >> $GITHUB_STEP_SUMMARY
+          for f in test/*/; do
+            name=$(basename $f)
+            if [ -f "${f}metadata.json" ]; then
+              samples=$(grep -o '"samples": [0-9]*' "${f}metadata.json" | grep -o '[0-9]*')
+              echo "| $name | $samples |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done

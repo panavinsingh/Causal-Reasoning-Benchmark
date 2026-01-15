@@ -1,0 +1,7 @@
+{
+    "name": "CauSciBench",
+    "source": "https://github.com/causalNLP/CauSciBench",
+    "samples": 155,
+    "license": "Apache-2.0",
+    "description": "Causal scientific reasoning benchmark"
+}

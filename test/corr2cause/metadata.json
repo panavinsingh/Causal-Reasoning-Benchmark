@@ -1,0 +1,8 @@
+{
+    "name": "Corr2Cause",
+    "source": "https://huggingface.co/datasets/causalnlp/corr2cause",
+    "split": "test",
+    "samples": 400,
+    "license": "CC-BY-4.0",
+    "description": "Correlation to causation inference benchmark"
+}

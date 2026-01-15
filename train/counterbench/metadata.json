@@ -1,0 +1,7 @@
+{
+  "name": "CounterBench",
+  "source": "https://huggingface.co/datasets/CounterBench/CounterBench",
+  "samples": 1000,
+  "license": "MIT",
+  "description": "Counterfactual reasoning benchmark (first 1000 samples)"
+}

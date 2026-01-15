@@ -1,0 +1,6 @@
+{
+  "name": "Dev Split",
+  "samples": 300,
+  "license": "MIT",
+  "selection_rule": "sha256(prompt) %% 12 == 7"
+}

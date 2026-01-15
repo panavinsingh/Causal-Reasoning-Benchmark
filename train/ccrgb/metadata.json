@@ -1,0 +1,7 @@
+{
+  "name": "CCR.GB Train",
+  "source": "jmaasch/compositional_causal_reasoning",
+  "samples": 4000,
+  "license": "MIT",
+  "selection_rule": "sha256(prompt) %% 12 == 3, exclude test IDs"
+}

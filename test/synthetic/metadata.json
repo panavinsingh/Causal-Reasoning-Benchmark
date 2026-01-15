@@ -1,0 +1,7 @@
+{
+    "name": "Synthetic Causal Reasoning",
+    "source": "Custom generated",
+    "samples": 600,
+    "license": "Apache-2.0",
+    "description": "Synthetic causal reasoning dataset covering all Pearl's Causal Hierarchy rungs"
+}
