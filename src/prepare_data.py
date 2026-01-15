@@ -243,7 +243,9 @@ def generate_checksums():
         if subdir.is_dir():
             for f in subdir.glob("*.jsonl"):
                 h = sha256_file(f)
-                train_manifest.append(f"{h}  {f.relative_to(BASE_DIR)}")
+                # Use forward slashes for cross-platform compatibility
+                rel_path = str(f.relative_to(BASE_DIR)).replace("\\", "/")
+                train_manifest.append(f"{h}  {rel_path}")
     
     with open(CHECKSUMS_DIR / "train.sha256", 'w') as f:
         f.write("\n".join(train_manifest) + "\n")
@@ -256,7 +258,9 @@ def generate_checksums():
             for ext in ["*.jsonl", "*.csv"]:
                 for f in subdir.glob(ext):
                     h = sha256_file(f)
-                    test_manifest.append(f"{h}  {f.relative_to(BASE_DIR)}")
+                    # Use forward slashes for cross-platform compatibility
+                    rel_path = str(f.relative_to(BASE_DIR)).replace("\\", "/")
+                    test_manifest.append(f"{h}  {rel_path}")
     
     with open(CHECKSUMS_DIR / "test.sha256", 'w') as f:
         f.write("\n".join(test_manifest) + "\n")

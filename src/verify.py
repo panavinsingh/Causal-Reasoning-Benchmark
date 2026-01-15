@@ -81,6 +81,8 @@ def verify_checksums() -> bool:
                 if not line:
                     continue
                 expected_hash, rel_path = line.split("  ", 1)
+                # Normalize path separators for cross-platform compatibility
+                rel_path = rel_path.replace("\\", "/")
                 filepath = BASE_DIR / rel_path
                 
                 if not filepath.exists():
