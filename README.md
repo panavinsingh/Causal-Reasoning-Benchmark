@@ -32,9 +32,11 @@ This repository provides curated training and evaluation datasets for causal rea
 
 | Split | Dataset | Rows | License | Selection Rule |
 |-------|---------|------|---------|----------------|
-| **Train** | CCR.GB | 4,000 | GPL-3.0 | `sha256(prompt) % 12 == 3`, exclude test IDs |
-| **Train** | CounterBench | 1,000 | MIT | First 1,000 samples |
-| **Dev** | CCR.GB | 300 | GPL-3.0 | `sha256(prompt) % 12 == 7` |
+| **Train** | CCR.GB | 4,000 | GPL-3.0 | `sha256(prompt) % 17 == 3`, exclude test IDs |
+| **Train** | CounterBench | 1,000 | MIT | Full dataset |
+| **Train** | **LIMA-1K** | 1,000 | GPL-3.0 | Quality scoring + hash filter (top 1K) |
+| **Train** | **LIMA-500** | 500 | GPL-3.0 + MIT | 250 CCR.GB + 250 CounterBench |
+| **Dev** | CCR.GB | 300 | GPL-3.0 | `sha256(prompt) % 17 == 7` |
 | **Test** | CCR.GB | 400 | GPL-3.0 | Contiguous curriculum blocks |
 | **Test** | CLadder | 1,278 | Apache-2.0 | `id % 8 == 0` |
 | **Test** | Corr2Cause | 400 | CC-BY-4.0 | Stratified by label (seed 42) |
@@ -43,7 +45,7 @@ This repository provides curated training and evaluation datasets for causal rea
 
 | | | | | |
 |---|---|---|---|---|
-| **Train Total** | | **5,000** | | |
+| **Train Total** | | **6,500** | | |
 | **Dev Total** | | **300** | | |
 | **Test Total** | | **2,833** | | |
 
@@ -52,17 +54,19 @@ This repository provides curated training and evaluation datasets for causal rea
 ## Repository Structure
 
 ```
-├── train/                      # Training data (5,000 samples)
-│   ├── ccrgb/                  # 4,000 samples
-│   │   ├── ccrgb_train.jsonl
+├── train/                      # Training data
+│   ├── ccrgb/
+│   │   ├── ccrgb_train.jsonl   # 4,000 samples
+│   │   ├── ccrgb_lima1k.jsonl  # 1,000 LIMA-quality samples
+│   │   ├── ccrgb_scores.csv    # Quality scores for 49,600 candidates
 │   │   └── metadata.json
-│   └── counterbench/           # 1,000 samples
-│       ├── counterbench.jsonl
-│       └── metadata.json
+│   ├── counterbench/
+│   │   └── counterbench.jsonl  # 1,000 samples
+│   ├── lima_500.jsonl          # 500 mixed (250 CCR.GB + 250 CounterBench)
+│   └── VERSION.txt             # Source commit pinning
 │
 ├── dev/                        # Development set (300 samples)
-│   ├── dev_300.jsonl
-│   └── metadata.json
+│   └── dev_300.jsonl
 │
 ├── test/                       # Evaluation data (2,833 samples)
 │   ├── ccrgb/                  # 400 samples
@@ -71,19 +75,22 @@ This repository provides curated training and evaluation datasets for causal rea
 │   ├── causcibench/            # 155 samples
 │   └── synthetic/              # 600 samples
 │
-├── src/                        # Source code
-│   ├── prepare_data.py
+├── src/
+│   ├── build_lima_datasets.py  # LIMA dataset generation
 │   ├── build_train_4k.py
 │   ├── verify.py
-│   └── check_contamination.py
+│   ├── check_contamination.py
+│   └── final_audit.py          # ICML/ICLR audit
 │
-├── checksums/                  # SHA-256 manifests
-│   ├── train.sha256
-│   └── test.sha256
+├── checksums/
+│   ├── lima1k.sha256
+│   ├── lima500.sha256
+│   └── *.sha256
 │
 └── docs/
-    ├── CONTRIBUTING.md
-    └── DATA_CARD.md
+    ├── selection_report.md     # LIMA methodology
+    ├── DATA_CARD.md
+    └── CONTRIBUTING.md
 ```
 
 ---
@@ -110,14 +117,23 @@ python src/build_train_4k.py
 
 ## Sampling Rationale
 
-### Why 5K training samples?
+### LIMA Datasets (Recommended for Fine-tuning)
 
-| Concern | Our approach |
-|---------|--------------|
-| **Compute budget** | Pilot experiments show accuracy plateaus after ~5K examples on A100-80GB |
-| **Class balance** | 4K CCR.GB samples stratified to match test split difficulty distribution |
-| **Domain coverage** | 1K CounterBench (20%) adds explicit counterfactual practice |
-| **Determinism** | Hash-based selection (`sha256 % 12`) ensures bit-perfect reproducibility |
+| Dataset | Samples | Selection Method |
+|---------|---------|------------------|
+| **LIMA-1K** | 1,000 | Top quality scores from ~50K CCR.GB |
+| **LIMA-500** | 500 | 250 CCR.GB + 250 CounterBench |
+
+**Quality Scoring Formula:**
+```
+score = 0.5 × difficulty + 0.3 × pearl_level + 0.2 × novelty
+```
+
+- **Difficulty**: DAG complexity
+- **Pearl Level**: L1=0.33, L2=0.67, L3=1.0
+- **Novelty**: Semantic uniqueness via `all-MiniLM-L6-v2` embeddings
+
+See [`docs/selection_report.md`](docs/selection_report.md) for full methodology.
 
 ### CCR.GB Test Split
 
