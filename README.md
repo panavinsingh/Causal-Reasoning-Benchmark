@@ -156,8 +156,8 @@ Curriculum-aware contiguous blocks preserving compositional complexity:
 | **Deterministic** | Hash-based sampling, no RNG |
 | **Verifiable** | SHA-256 checksums for all files |
 | **Leak-free** | ID-based overlap verification |
-| **Traceable** | HuggingFace commit hashes in metadata |
-| **Rebuild** | `build_train_4k.py` regenerates exact splits |
+| **Traceable** | HuggingFace commit hashes in `train/VERSION.txt` |
+| **Rebuild** | `build_lima_datasets.py` regenerates exact LIMA splits |
 
 ```bash
 # Verify checksums
