@@ -119,6 +119,8 @@ python src/build_train_4k.py
 
 ### LIMA Datasets (Recommended for Fine-tuning)
 
+> **What is LIMA?** The [LIMA paper](https://arxiv.org/abs/2305.11206) ("Less Is More for Alignment", Zhou et al., 2023) demonstrated that fine-tuning on a small number of high-quality examples can match or exceed training on much larger datasets. Our LIMA subsets apply this principle: instead of training on all 50K CCR.GB samples, we use quality scoring to select the most valuable 1,000.
+
 | Dataset | Samples | Selection Method |
 |---------|---------|------------------|
 | **LIMA-1K** | 1,000 | Top quality scores from ~50K CCR.GB |
@@ -129,9 +131,9 @@ python src/build_train_4k.py
 score = 0.5 × difficulty + 0.3 × pearl_level + 0.2 × novelty
 ```
 
-- **Difficulty**: DAG complexity
-- **Pearl Level**: L1=0.33, L2=0.67, L3=1.0
-- **Novelty**: Semantic uniqueness via `all-MiniLM-L6-v2` embeddings
+- **Difficulty**: DAG complexity (number of causal edges)
+- **Pearl Level**: Causal hierarchy level (L1=Association, L2=Intervention, L3=Counterfactual)
+- **Novelty**: Semantic uniqueness computed via sentence embeddings (`all-MiniLM-L6-v2`)
 
 See [`docs/selection_report.md`](docs/selection_report.md) for full methodology.
 
