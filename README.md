@@ -34,7 +34,7 @@ This repository provides curated training and evaluation datasets for causal rea
 |-------|---------|------|---------|----------------|
 | **Train** | CCR.GB | 4,000 | GPL-3.0 | `sha256(prompt) % 17 == 3`, exclude test IDs |
 | **Train** | CounterBench | 1,000 | MIT | Full dataset |
-| **Train** | **LIMA-1K** | 1,000 | GPL-3.0 | Quality scoring + hash filter (top 1K) |
+| **Train** | **LIMA-1K** *(CCR.GB subset)* | 1,000 | GPL-3.0 | Quality scoring + hash filter (top 1K from 50K CCR.GB) |
 | **Train** | **LIMA-500** | 500 | GPL-3.0 + MIT | 250 CCR.GB + 250 CounterBench |
 | **Dev** | CCR.GB | 300 | GPL-3.0 | `sha256(prompt) % 17 == 7` |
 | **Test** | CCR.GB | 400 | GPL-3.0 | Contiguous curriculum blocks |

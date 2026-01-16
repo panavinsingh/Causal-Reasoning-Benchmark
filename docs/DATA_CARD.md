@@ -17,7 +17,7 @@ The Causal Reasoning Benchmark provides curated datasets for training and evalua
 
 | Dataset | Samples | Selection | Location |
 |---------|---------|-----------|----------|
-| **LIMA-1K** | 1,000 | Quality scoring + hash filter | `train/ccrgb/ccrgb_lima1k.jsonl` |
+| **LIMA-1K** | 1,000 | Top 1K from 50K CCR.GB (quality scored) | `train/ccrgb/ccrgb_lima1k.jsonl` |
 | **LIMA-500** | 500 | 250 CCR.GB + 250 CounterBench | `train/lima_500.jsonl` |
 
 **LIMA Selection Methodology:**
