@@ -34,6 +34,17 @@ jobs:
       
       - name: Check data contamination
         run: python src/check_contamination.py
+      
+      - name: Verify LIMA checksums
+        run: |
+          echo "Verifying LIMA dataset checksums..."
+          cd checksums
+          if [ -f lima1k.sha256 ]; then
+            cd .. && sha256sum -c checksums/lima1k.sha256
+          fi
+          if [ -f lima500.sha256 ]; then
+            cd .. && sha256sum -c checksums/lima500.sha256
+          fi
 
   data-stats:
     runs-on: ubuntu-latest

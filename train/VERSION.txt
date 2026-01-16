@@ -1,0 +1,24 @@
+# Dataset Version Manifest
+# Generated: 2026-01-16
+
+CCR.GB:
+  repository: jmaasch/compositional_causal_reasoning
+  subset: clinical_notes_v0
+  commit: 564e27ae0c447265f269208e34173b06d20971ad
+  license: GPL-3.0
+  total_samples: ~50,000
+
+CounterBench:
+  repository: CounterBench/CounterBench
+  commit: c6225dfa00b7a89ccfeae67797b9a6d80e48e44c
+  license: MIT
+  total_samples: 1,000
+
+Selection:
+  method: hash-deterministic + quality-scoring
+  hash_rule: SHA256(prompt) % 17 == 3
+  quality_weights:
+    difficulty: 0.5
+    pearl_level: 0.3
+    novelty: 0.2
+  novelty_model: all-MiniLM-L6-v2
